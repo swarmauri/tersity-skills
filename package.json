@@ -9,12 +9,14 @@
   "bugs": "https://github.com/swarmauri/tersity-skills/issues",
   "keywords": ["agent-skills", "antigravity", "claude", "codex", "loc", "sloc"],
   "type": "module",
+  "packageManager": "pnpm@11.16.0",
   "bin": {"tersity-skills": "npm/cli.mjs"},
   "files": [".claude-plugin/", ".codex-plugin/", "npm/", "skills/", "LICENSE", "README.md"],
   "scripts": {
     "check": "node --check npm/cli.mjs && node --test tests/npm/*.test.mjs",
-    "pack:check": "npm pack --dry-run"
+    "contract:check": "python scripts/check_distribution_contract.py",
+    "pack:check": "pnpm pack --dry-run --skip-manifest-obfuscation"
   },
-  "engines": {"node": ">=20"},
-  "publishConfig": {"access": "public", "provenance": true}
+  "engines": {"node": ">=20", "pnpm": ">=11"},
+  "publishConfig": {"access": "public"}
 }

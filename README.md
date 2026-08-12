@@ -45,7 +45,8 @@ pipx install tersity-skills
 Node.js 20 or newer:
 
 ```bash
-npm install --global tersity-skills
+pnpm add --global tersity-skills
+# npm consumers can also use: npm install --global tersity-skills
 ```
 
 Install skills for a user:
@@ -92,10 +93,17 @@ Tersity means less accidental code, not fewer lines at any cost. The skills reje
 ## Development
 
 ```bash
-uv sync
-uv run ruff check .
-uv run pytest
-uv build
-npm.cmd run check
-npm.cmd pack --dry-run
+uv sync --locked
+uv run --frozen ruff check .
+uv run --frozen pytest
+uv build --no-sources
+pnpm install --frozen-lockfile
+pnpm run check
+pnpm run pack:check
 ```
+
+## Distribution contract
+
+PyPI `tersity-skills` and npm `tersity-skills` use the same version and bundle the same `skills/` payload. `scripts/check_distribution_contract.py` verifies the source versions; `scripts/compare_distribution_payloads.py` compares every bundled skill file in the built wheel and npm tarball.
+
+Python packaging, locking, building, smoke testing, and publishing use uv. Node dependency management, testing, and packing use pnpm. The release workflow uses the npm CLI only for the final npm Trusted Publishing upload because npm's OIDC exchange is implemented by that CLI. Because this repository is private, npm provenance attestations are not available.

@@ -19,19 +19,53 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - run: uv sync
-      - run: uv run ruff check .
-      - run: uv run pytest
-      - run: uv build
-      - run: uv run twine check dist/*
+      - run: uv sync --locked
+      - run: uv run --frozen ruff check .
+      - run: uv run --frozen pytest
+      - run: uv run --frozen python scripts/check_distribution_contract.py
+      - run: uv build --no-sources
+      - run: uv run --frozen twine check dist/*
 
   npm:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-      - run: npm install --ignore-scripts
-      - run: npm run check
-      - run: npm pack --dry-run
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm run check
+      - run: pnpm run pack:check
+
+  distributions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: uv sync --locked
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: uv build --no-sources
+      - run: pnpm pack --pack-destination dist-npm --skip-manifest-obfuscation
+      - run: uv run --frozen python scripts/compare_distribution_payloads.py dist/*.whl dist-npm/*.tgz
+      - run: uv run --isolated --no-project --with dist/*.whl scripts/smoke_installed_python.py
+      - run: uv run --isolated --no-project --with dist/*.tar.gz scripts/smoke_installed_python.py
+      - name: Smoke test installed npm tarball
+        run: |
+          mkdir npm-smoke
+          cd npm-smoke
+          pnpm init
+          pnpm add ../dist-npm/*.tgz --ignore-scripts
+          node node_modules/tersity-skills/npm/cli.mjs install all --scope project --project .
+          cd ..
+          node scripts/assert_installed_npm.mjs npm-smoke

@@ -6,8 +6,10 @@ __pycache__/
 .venv/
 build/
 dist/
+dist-npm/
 node_modules/
 *.tgz
 .npm-cache/
+.pnpm-store/
 tersity-*.json
 .tmp-*/

@@ -15,9 +15,12 @@ TARGETS = {
 
 
 def plugin_root() -> Path:
-    source_root = Path(__file__).resolve().parents[2]
-    if (source_root / ".codex-plugin/plugin.json").is_file():
-        return source_root
+    for parent in Path(__file__).resolve().parents:
+        if (parent / ".codex-plugin/plugin.json").is_file():
+            return parent
+        installed_root = parent / "share/tersity-skills/plugin"
+        if (installed_root / ".codex-plugin/plugin.json").is_file():
+            return installed_root
     return Path(sysconfig.get_path("data")) / "share/tersity-skills/plugin"
 
 

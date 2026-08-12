@@ -8,29 +8,79 @@ permissions:
   contents: read
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: uv sync --locked
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: uv run --frozen ruff check .
+      - run: uv run --frozen pytest
+      - run: pnpm run check
+      - run: uv run --frozen python scripts/check_distribution_contract.py --tag "${{ github.ref_name }}"
+      - run: uv build --no-sources
+      - run: uv run --frozen twine check dist/*
+      - run: pnpm pack --pack-destination dist-npm --skip-manifest-obfuscation
+      - run: uv run --frozen python scripts/compare_distribution_payloads.py dist/*.whl dist-npm/*.tgz
+      - run: uv run --isolated --no-project --with dist/*.whl scripts/smoke_installed_python.py
+      - run: uv run --isolated --no-project --with dist/*.tar.gz scripts/smoke_installed_python.py
+      - name: Smoke test installed npm tarball
+        run: |
+          mkdir npm-smoke
+          cd npm-smoke
+          pnpm init
+          pnpm add ../dist-npm/*.tgz --ignore-scripts
+          node node_modules/tersity-skills/npm/cli.mjs install all --scope project --project .
+          cd ..
+          node scripts/assert_installed_npm.mjs npm-smoke
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: npm-distribution
+          path: dist-npm/*.tgz
+          if-no-files-found: error
+
   pypi:
+    needs: build
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist
       - uses: astral-sh/setup-uv@v6
-      - run: uv build
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - run: uv publish --trusted-publishing always dist/*
 
   npm:
+    needs: build
     runs-on: ubuntu-latest
     environment: npm
     permissions:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: npm-distribution
+          path: dist-npm
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm install --global npm@^11.5.1
+      - run: npm publish dist-npm/*.tgz --access public
