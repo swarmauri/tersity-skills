@@ -1,0 +1,3 @@
+recursive-include .codex-plugin *.json
+recursive-include .claude-plugin *.json
+recursive-include skills *.md *.py *.yaml

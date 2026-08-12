@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tersify Codebase"
+  short_description: "Reduce code safely with behavioral proof"
+  default_prompt: "Use $tersify-codebase to reduce this codebase without changing behavior."

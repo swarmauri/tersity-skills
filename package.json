@@ -1,0 +1,20 @@
+{
+  "name": "tersity-skills",
+  "version": "0.1.0",
+  "description": "Portable agent skills for measuring and safely reducing codebases.",
+  "license": "Apache-2.0",
+  "author": "Jacob Stewart <jacob@swarmauri.com>",
+  "repository": {"type": "git", "url": "git+https://github.com/swarmauri/tersity-skills.git"},
+  "homepage": "https://github.com/swarmauri/tersity-skills#readme",
+  "bugs": "https://github.com/swarmauri/tersity-skills/issues",
+  "keywords": ["agent-skills", "antigravity", "claude", "codex", "loc", "sloc"],
+  "type": "module",
+  "bin": {"tersity-skills": "npm/cli.mjs"},
+  "files": [".claude-plugin/", ".codex-plugin/", "npm/", "skills/", "LICENSE", "README.md"],
+  "scripts": {
+    "check": "node --check npm/cli.mjs && node --test tests/npm/*.test.mjs",
+    "pack:check": "npm pack --dry-run"
+  },
+  "engines": {"node": ">=20"},
+  "publishConfig": {"access": "public", "provenance": true}
+}

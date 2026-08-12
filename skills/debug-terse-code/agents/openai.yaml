@@ -1,0 +1,4 @@
+interface:
+  display_name: "Debug Terse Code"
+  short_description: "Fix root causes without adding code sprawl"
+  default_prompt: "Use $debug-terse-code to diagnose and fix this failure tersely."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Evaluate Code Patterns"
+  short_description: "Find and rank code reduction opportunities"
+  default_prompt: "Use $evaluate-code-patterns to find safe code reduction opportunities."

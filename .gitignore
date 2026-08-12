@@ -1,0 +1,13 @@
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
+.venv/
+build/
+dist/
+node_modules/
+*.tgz
+.npm-cache/
+tersity-*.json
+.tmp-*/

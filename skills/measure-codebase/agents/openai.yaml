@@ -1,0 +1,4 @@
+interface:
+  display_name: "Measure Codebase"
+  short_description: "Establish trustworthy LOC and SLOC baselines"
+  default_prompt: "Use $measure-codebase to measure this repository and save a baseline."

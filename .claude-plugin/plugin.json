@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "tersity-skills",
+  "displayName": "Tersity Skills",
+  "version": "0.1.0",
+  "description": "Measure and safely reduce LOC, SLOC, duplication, and accidental code complexity.",
+  "author": {
+    "name": "Jacob Stewart",
+    "email": "jacob@swarmauri.com",
+    "url": "https://github.com/swarmauri"
+  },
+  "homepage": "https://github.com/swarmauri/tersity-skills",
+  "repository": "https://github.com/swarmauri/tersity-skills",
+  "license": "Apache-2.0",
+  "keywords": ["code-quality", "deduplication", "loc", "refactoring", "sloc", "tersity"],
+  "skills": "./skills/"
+}

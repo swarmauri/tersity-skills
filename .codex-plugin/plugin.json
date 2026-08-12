@@ -1,0 +1,41 @@
+{
+  "name": "tersity-skills",
+  "version": "0.1.0",
+  "description": "Measure and safely reduce LOC, SLOC, duplication, and accidental code complexity.",
+  "author": {
+    "name": "Jacob Stewart",
+    "email": "jacob@swarmauri.com",
+    "url": "https://github.com/swarmauri"
+  },
+  "homepage": "https://github.com/swarmauri/tersity-skills",
+  "repository": "https://github.com/swarmauri/tersity-skills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "code-quality",
+    "deduplication",
+    "loc",
+    "refactoring",
+    "sloc",
+    "tersity"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Tersity Skills",
+    "shortDescription": "Make code smaller without changing behavior.",
+    "longDescription": "Measures LOC and SLOC, finds repeated or accidental patterns, ranks safe reductions, performs verified refactors, and debugs without adding compensating complexity.",
+    "developerName": "Swarmauri",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Measure",
+      "Analyze",
+      "Recommend",
+      "Refactor",
+      "Debug"
+    ],
+    "defaultPrompt": [
+      "Measure and tersify this codebase.",
+      "Find the safest high-value code reductions.",
+      "Debug this failure without adding code sprawl."
+    ]
+  }
+}
