@@ -42,8 +42,13 @@ def install(target: str, scope: str, project: Path, force: bool) -> int:
     return 0
 
 
-def scan(arguments: list[str]) -> int:
-    script = plugin_root() / "skills/measure-codebase/scripts/tersity_scan.py"
+def scan(arguments: list[str], command: str = "scan") -> int:
+    helper = (
+        "count-lines/scripts/count_lines.py"
+        if command == "count-lines"
+        else "measure-codebase/scripts/tersity_scan.py"
+    )
+    script = plugin_root() / "skills" / helper
     return subprocess.call([sys.executable, str(script), *arguments])
 
 
@@ -58,10 +63,15 @@ def parser() -> argparse.ArgumentParser:
     commands.add_parser("path", help="print the bundled plugin root")
     scan_parser = commands.add_parser("scan", help="measure a codebase")
     scan_parser.add_argument("arguments", nargs=argparse.REMAINDER)
+    count_parser = commands.add_parser("count-lines", help="count LOC/SLOC with glob filters")
+    count_parser.add_argument("arguments", nargs=argparse.REMAINDER)
     return root
 
 
 def main() -> int:
+    # Forward options (including --help) to the actual counting parser.
+    if len(sys.argv) > 1 and sys.argv[1] == "count-lines":
+        return scan(sys.argv[2:], "count-lines")
     args = parser().parse_args()
     if args.command == "path":
         print(plugin_root())

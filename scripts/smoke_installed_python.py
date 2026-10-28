@@ -7,6 +7,7 @@ from tersity_skills import __version__
 from tersity_skills.cli import install, plugin_root
 
 SKILLS = {
+    "count-lines",
     "debug-terse-code",
     "evaluate-code-patterns",
     "measure-codebase",

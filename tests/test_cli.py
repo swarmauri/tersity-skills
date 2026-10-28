@@ -11,6 +11,7 @@ def test_project_install_copies_all_skills(tmp_path: Path) -> None:
     assert install("codex", "project", tmp_path, False) == 0
     installed = tmp_path / ".codex/skills"
     assert {path.name for path in installed.iterdir()} == {
+        "count-lines",
         "debug-terse-code",
         "evaluate-code-patterns",
         "measure-codebase",

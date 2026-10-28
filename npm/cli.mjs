@@ -40,8 +40,11 @@ async function install(target) {
   }
 }
 
-function scan(args) {
-  const script = join(root, "skills/measure-codebase/scripts/tersity_scan.py");
+function scan(args, command = "scan") {
+  const helper = command === "count-lines"
+    ? "skills/count-lines/scripts/count_lines.py"
+    : "skills/measure-codebase/scripts/tersity_scan.py";
+  const script = join(root, helper);
   for (const executable of ["python3", "python"]) {
     const result = spawnSync(executable, [script, ...args], { stdio: "inherit" });
     if (!result.error) return result.status ?? 1;
@@ -53,8 +56,11 @@ async function main() {
   const [, , command, target, ...rest] = process.argv;
   if (command === "path") return console.log(root);
   if (command === "scan") return process.exitCode = scan([target, ...rest].filter(Boolean));
+  if (command === "count-lines") {
+    return process.exitCode = scan([target, ...rest].filter(Boolean), command);
+  }
   if (command === "install" && target) return install(target);
-  console.error("usage: tersity-skills <path|scan|install TARGET> [options]");
+  console.error("usage: tersity-skills <path|scan|count-lines|install TARGET> [options]");
   process.exitCode = 2;
 }
 

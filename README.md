@@ -27,6 +27,7 @@ Portable Codex, Claude Code, and Google Antigravity skills for making a codebase
 
 | Skill | Purpose |
 | --- | --- |
+| `count-lines` | Count LOC/SLOC for paths and globs with include/exclude filters |
 | `measure-codebase` | Establish comparable LOC/SLOC and duplication evidence |
 | `evaluate-code-patterns` | Rank safe, pattern-based reduction opportunities |
 | `tersify-codebase` | Apply reductions with contract and behavior proof |
@@ -85,6 +86,23 @@ tersity-skills scan . --output tersity-baseline.json
 ```
 
 The report states its LOC and SLOC definitions. Treat duplicate blocks as investigation leads: language-aware inspection and tests must confirm ownership and semantics.
+
+Count selected files or folders with repeatable include/exclude globs:
+
+```bash
+uv run tersity-skills count-lines src tests --include '**/*.py' --exclude '**/generated/**'
+uv run tersity-skills count-lines 'src/**/*.py' --format json --output line-counts.json
+# Standalone, including after copying only the skill:
+uv run skills/count-lines/scripts/count_lines.py . --include '*.py'
+```
+
+Counts include per-file LOC, blank, comment-only, and SLOC columns plus totals.
+Filters are relative to `--root` (default: current directory); excludes win over
+includes. Quote glob patterns. Python uses tokenization; other supported syntaxes
+use comment heuristics, and unknown text counts nonblank lines as source.
+Skipped binary, undecodable, unreadable, or invalid Python files are reported and
+return exit status 1. See the [count-lines skill](skills/count-lines/SKILL.md)
+for matching rules and default exclusions.
 
 ## Optimization contract
 

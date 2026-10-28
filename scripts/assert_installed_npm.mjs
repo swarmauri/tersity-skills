@@ -5,6 +5,7 @@ import { resolve } from "node:path";
 const root = resolve(process.argv[2] ?? "npm-smoke");
 const destinations = [".codex/skills", ".claude/skills", ".agents/skills"];
 const skills = [
+  "count-lines",
   "debug-terse-code",
   "evaluate-code-patterns",
   "measure-codebase",

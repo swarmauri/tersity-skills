@@ -1,0 +1,4 @@
+interface:
+  display_name: "Count Lines"
+  short_description: "Count LOC and SLOC with paths and glob filters"
+  default_prompt: "Use $count-lines to count LOC and SLOC for selected files and folders."

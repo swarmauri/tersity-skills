@@ -15,6 +15,7 @@ test("installs all project skills for Codex", async () => {
       { encoding: "utf8" },
     );
     assert.equal(result.status, 0, result.stderr);
+    assert.ok(existsSync(join(project, ".codex/skills/count-lines/scripts/count_lines.py")));
     assert.ok(existsSync(join(project, ".codex/skills/measure-codebase/SKILL.md")));
     assert.ok(existsSync(join(project, ".codex/skills/tersify-codebase/SKILL.md")));
   } finally {
