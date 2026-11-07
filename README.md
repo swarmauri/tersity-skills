@@ -4,14 +4,10 @@
 
 # Tersity Skills
 
-[![PyPI](https://img.shields.io/pypi/v/tersity-skills)](https://pypi.org/project/tersity-skills/)
-[![Python](https://img.shields.io/pypi/pyversions/tersity-skills)](https://pypi.org/project/tersity-skills/)
-[![npm](https://img.shields.io/npm/v/tersity-skills)](https://www.npmjs.com/package/tersity-skills)
-[![Downloads](https://img.shields.io/pypi/dm/tersity-skills)](https://pypi.org/project/tersity-skills/)
-[![Hits](https://hits.sh/github.com/swarmauri/tersity-skills.svg)](https://hits.sh/github.com/swarmauri/tersity-skills/)
+[![CI](https://github.com/swarmauri/tersity-skills/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/swarmauri/tersity-skills/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 
-Portable Codex, Claude Code, and Google Antigravity skills for making a codebase smaller without changing its supported behavior.
+Tersity Skills helps Codex, Claude Code, and Google Antigravity measure a codebase, find opportunities to simplify it, and verify that refactors preserve supported behavior.
 
 ## Features
 
@@ -33,22 +29,32 @@ Portable Codex, Claude Code, and Google Antigravity skills for making a codebase
 | `tersify-codebase` | Apply reductions with contract and behavior proof |
 | `debug-terse-code` | Correct the owning invariant without compensating sprawl |
 
-## Install
+## Install from source
 
-Python 3.10 through 3.14:
-
-```bash
-uv tool install tersity-skills
-# or
-pipx install tersity-skills
-```
-
-Node.js 20 or newer:
+The repository contains Python and npm package definitions for `tersity-skills`.
+Install from a checkout while registry releases are pending.
 
 ```bash
-pnpm add --global tersity-skills
-# npm consumers can also use: npm install --global tersity-skills
+git clone https://github.com/swarmauri/tersity-skills.git
+cd tersity-skills
 ```
+
+For Python 3.10 through 3.14, install the CLI with uv:
+
+```bash
+uv tool install .
+```
+
+For Node.js 20 or newer, install the CLI with npm:
+
+```bash
+npm install --global .
+```
+
+With the npm installation, `scan` and `count-lines` require Python 3.10 or
+newer on `PATH`.
+
+## Install skills into an agent
 
 Install skills for a user:
 
@@ -68,7 +74,8 @@ tersity-skills install all --scope project
 
 Project destinations are `.codex/skills`, `.claude/skills`, and `.agents/skills`. User destinations are `~/.codex/skills`, `~/.claude/skills`, and `~/.gemini/config/skills`.
 
-The repository root is also a native Codex and Claude plugin. During development, load it from its checkout using the client's local-plugin workflow.
+The repository root is also a native Codex and Claude Code plugin. Load the
+checkout using your client's local plugin workflow.
 
 ## Usage
 
@@ -120,8 +127,11 @@ pnpm run check
 pnpm run pack:check
 ```
 
+For a first contribution, browse the
+[good first issues](https://github.com/swarmauri/tersity-skills/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22).
+
 ## Distribution contract
 
 PyPI `tersity-skills` and npm `tersity-skills` use the same version and bundle the same `skills/` payload. `scripts/check_distribution_contract.py` verifies the source versions; `scripts/compare_distribution_payloads.py` compares every bundled skill file in the built wheel and npm tarball.
 
-Python packaging, locking, building, smoke testing, and publishing use uv. Node dependency management, testing, and packing use pnpm. The release workflow uses the npm CLI only for the final npm Trusted Publishing upload because npm's OIDC exchange is implemented by that CLI. Because this repository is private, npm provenance attestations are not available.
+Python packaging, locking, building, smoke testing, and publishing use uv. Node dependency management, testing, and packing use pnpm. The release workflow uses the npm CLI for its final Trusted Publishing upload.
